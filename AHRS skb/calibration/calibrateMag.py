@@ -3,6 +3,7 @@
 
 
 import numpy as np
+np.set_printoptions(suppress=True)
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from scipy import linalg
@@ -97,7 +98,7 @@ def main():
     print("A_inv: ")
     print(Ainv)
     print()
-    print("b")
+    print("b: ")
     print(b)
     print()
 
