@@ -52,3 +52,4 @@ CATKIN_IGNORE
 AHRS skb/.ipynb_checkpoints/
 AHRS skb/calibration/.ipynb_checkpoints/
 AHRS skb/calibration/.vscode/c_cpp_properties.json
+provided_Documentation_DDBOAT/.vscode/
