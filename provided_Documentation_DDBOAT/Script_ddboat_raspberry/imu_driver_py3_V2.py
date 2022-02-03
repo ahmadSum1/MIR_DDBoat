@@ -16,8 +16,8 @@ def read_gll(ser,nmax=20):
     #for i in range(nmax):
          
         
-        #v=ser.readline().decode("utf-8")
-    v= bytearray(ser.readline()).decode("utf-8")
+    v=ser.readline().decode("utf-8")
+    # v= bytearray(ser.readline()).decode("utf-8")
         
     return v
    
