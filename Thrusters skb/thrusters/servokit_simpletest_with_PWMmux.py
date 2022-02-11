@@ -34,19 +34,22 @@ print("set angle None")
 time.sleep(1)
 print("slept for 1s")
 
+val = 0
 
-kit.servo[1].angle = 0          
-print("set angle 0")
+kit.servo[1].angle = val          
+print(f"set angle {val}")
 time.sleep(3)
 print("slept for 3s")
 
-kit.servo[1].angle = 70
-print("set angle 70")
-time.sleep(3)
+val = 70
+kit.servo[1].angle = val          
+print(f"set angle {val}")
+time.sleep(5)
 print("slept for 5s")
 
-kit.servo[1].angle = 74
-print("set angle 76")
+val = 75
+kit.servo[1].angle = val          
+print(f"set angle {val}")
 time.sleep(1)
 print("slept for 1s")
 
