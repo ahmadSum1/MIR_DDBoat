@@ -1,5 +1,4 @@
-# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
-# SPDX-License-Identifier: MIT
+# Author: 2022 Sakib AHMED, Masster MIR UTLN
 
 '''
 Troubleshooting
@@ -9,7 +8,7 @@ Troubleshooting
             2. add user to group: $sudo usermod -a -G i2c ubuntu
         source: https://raspberrypi.stackexchange.com/a/127266
     Motor goes brrrrr.... on 2nd run after power recycle(of esc)
-        setting the angle to "None" seem to help most times
+        arm only once per power cycle
 
 '''
 
@@ -22,11 +21,7 @@ import sys
 minESC = 70
 maxESC = 80
 
-
-def mapValues(value, minTo, maxTo, minFrom, maxFrom):
-    return int(minTo + (maxTo - minTo) * ((value - minFrom) / (maxFrom - minFrom)))
-
-
+## init_motors
 # Set channels to the number of servo channels on your kit.
 # 8 for FeatherWing, 16 for Shield/HAT/Bonnet.
 kit = ServoKit(channels=16)
@@ -37,26 +32,8 @@ print("set mux to SLAVE mode")
 time.sleep(1)
 print("slept for 1s")
 
-
-
-val = int(sys.argv[2])
-dt = float(sys.argv[3])
-kit.servo[0].angle = val          
-kit.servo[1].angle = val          
-print(f"set angle {val}")
-time.sleep(dt)
-print(f"slept for {dt}s")
-
-
-
-
-
-# release servo objects
-kit.servo[3].angle = None
-kit.servo[0].angle = None 
-kit.servo[1].angle = None          
-print("set angle None")
-time.sleep(1)
+def mapValues(value, minTo, maxTo, minFrom, maxFrom):
+    return int(minTo + (maxTo - minTo) * ((value - minFrom) / (maxFrom - minFrom)))
 
 def runMotor(speed_Left, speed_Right):
     esc_Left = mapValues(-speed_Left, minESC, maxESC, 0, 100)  #neg cz it has to run in the opposite dirrection
@@ -66,9 +43,21 @@ def runMotor(speed_Left, speed_Right):
     kit.servo[0].angle = esc_Left          
     kit.servo[1].angle = esc_Right 
 
-# kit.continuous_servo[1].throttle = 1
-# time.sleep(1)
-# kit.continuous_servo[1].throttle = -1
-# time.sleep(1)
-# kit.servo[0].angle = 0
-# kit.continuous_servo[1].throttle = 0
+
+
+# get values from sys arg
+val = int(sys.argv[1])
+dt = float(sys.argv[2])
+
+runMotor(val,val)
+
+print(f"set angle {val}")
+time.sleep(dt)
+print(f"slept for {dt}s")
+
+# release servo objects
+kit.servo[3].angle = None
+kit.servo[0].angle = None 
+kit.servo[1].angle = None          
+print("set angle None")
+time.sleep(1)

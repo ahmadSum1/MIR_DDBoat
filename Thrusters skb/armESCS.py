@@ -49,7 +49,7 @@ val = minESC
 kit.servo[0].angle = val          
 kit.servo[1].angle = val           
 print(f"set angle {val}")
-time.sleep(0.005)
+time.sleep(1)
 print("slept for 5ms       *********ARMED**********")
 
 # release servo objects
