@@ -22,13 +22,14 @@ from adafruit_servokit import ServoKit
 kit = ServoKit(channels=16)
 # set mux to SLAVE mode by SEL input(servo[3]) to >1700us
 kit.servo[3].angle = None 
-kit.servo[3].angle = 170  #any value above 126 
+kit.servo[3].angle = 135  #any value above 110
 print("set mux to SLAVE mode")
 time.sleep(1)
 print("slept for 1s")
 
 
 # run motors (0=left, 1=right)
+kit.servo[0].angle = None 
 kit.servo[1].angle = None 
 print("set angle None")
 time.sleep(1)
@@ -36,25 +37,29 @@ print("slept for 1s")
 
 val = 0
 
+kit.servo[0].angle = val          
 kit.servo[1].angle = val          
 print(f"set angle {val}")
 time.sleep(3)
 print("slept for 3s")
 
 val = 70
-kit.servo[1].angle = val          
+kit.servo[0].angle = val          
+kit.servo[1].angle = val           
 print(f"set angle {val}")
 time.sleep(5)
 print("slept for 5s")
 
-val = 75
+val = 76
+kit.servo[0].angle = val          
 kit.servo[1].angle = val          
 print(f"set angle {val}")
 time.sleep(1)
 print("slept for 1s")
 
 # release servo objects
-kit.servo[3].angle = None 
+kit.servo[3].angle = None
+kit.servo[0].angle = None 
 kit.servo[1].angle = None          
 print("set angle None")
 time.sleep(1)
