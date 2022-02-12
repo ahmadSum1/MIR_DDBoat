@@ -3,6 +3,6 @@
 # navigate to pwd and run the script and back
 
 cd /
-cd /home/ubuntu/MIR_DDBoat/Thrusters\ skb/
+cd /home/ubuntu/MIR_DDBoat/Thrusters_skb/
 sudo python armESCS.py
 cd /
