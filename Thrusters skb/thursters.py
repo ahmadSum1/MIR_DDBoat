@@ -24,7 +24,7 @@ maxESC = 80
 
 
 def mapValues(value, minTo, maxTo, minFrom, maxFrom):
-    return minTo + (maxTo - minTo) * ((value - minFrom) / (maxFrom - minFrom))
+    return int(minTo + (maxTo - minTo) * ((value - minFrom) / (maxFrom - minFrom)))
 
 
 # Set channels to the number of servo channels on your kit.
@@ -37,29 +37,6 @@ print("set mux to SLAVE mode")
 time.sleep(1)
 print("slept for 1s")
 
-if sys.argv[1] == "--arm":
-    print("starting arming sequences")
-    # run motors (0=left, 1=right)
-    kit.servo[0].angle = None 
-    kit.servo[1].angle = None 
-    print("set angle None")
-    time.sleep(1)
-    print("slept for 1s")
-
-    val = 0
-
-    kit.servo[0].angle = val          
-    kit.servo[1].angle = val          
-    print(f"set angle {val}")
-    time.sleep(3)
-    print("slept for 3s")
-
-    val = minESC
-    kit.servo[0].angle = val          
-    kit.servo[1].angle = val           
-    print(f"set angle {val}")
-    time.sleep(5)
-    print("slept for 5s       *********ARMED**********")
 
 
 val = int(sys.argv[2])
@@ -71,30 +48,8 @@ time.sleep(dt)
 print(f"slept for {dt}s")
 
 
-# val = 66
-# print(f"Trying reverse at speed: {val}")
-# kit.servo[0].angle = val          
-# kit.servo[1].angle = val          
-# print(f"set angle {val}")
-# time.sleep(1)
-# print("slept for 1s")
 
 
-# val = 0
-# print(f"setting throttle speed to: {val}")
-# kit.servo[0].angle = val          
-# kit.servo[1].angle = val          
-# print(f"set angle {val}")
-# time.sleep(0.25)
-# print("slept for 0.25 s")
-
-
-# val = 70
-# kit.servo[0].angle = val          
-# kit.servo[1].angle = val           
-# print(f"set angle {val}")
-# time.sleep(1)
-# print("slept for 1s")
 
 # release servo objects
 kit.servo[3].angle = None
@@ -102,8 +57,14 @@ kit.servo[0].angle = None
 kit.servo[1].angle = None          
 print("set angle None")
 time.sleep(1)
-print("slept for 1s")
 
+def runMotor(speed_Left, speed_Right):
+    esc_Left = mapValues(-speed_Left, minESC, maxESC, 0, 100)  #neg cz it has to run in the opposite dirrection
+    esc_Right = mapValues(speed_Right, minESC, maxESC, 0, 100)
+    
+    # run motors (0=left, 1=right) 
+    kit.servo[0].angle = esc_Left          
+    kit.servo[1].angle = esc_Right 
 
 # kit.continuous_servo[1].throttle = 1
 # time.sleep(1)
