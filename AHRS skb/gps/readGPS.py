@@ -1,39 +1,15 @@
-#!/usr/bin/env python
-# license removed for brevity
-import rospy
-from sensor_msgs.msg import NavSatFix
+
 
 import pynmea2
 import serial
 import os
 import time
 
-
-def talker():
-    pub = rospy.Publisher('GPS', NavSatFix, queue_size=10)
-    rospy.init_node('talker', anonymous=True)
-    rate = rospy.Rate(10) # 10hz
-    while not rospy.is_shutdown():
-        # instantialize the message
-        msg = NavSatFix()
-        msg.header = rospy.get_rostime()
-        msg.header.frame_id = 'gnss'
-        msg.status.status = NavSatStatus.STATUS_SBAS_FIX
-        # get the data from sensor
-        lat, lng = read_gll(ser)
-        # set the data for publishing
-        msg.latitude = lat
-        msg.longitude = lng
-        msg.altitude = 0.1        
-		# publish the message
-        pub.publish(msg)
-        rate.sleep()
-
-
+import traceback
 
 # gps functions
 def init_line():
-    ser = serial.Serial('/dev/ttyS0',timeout=1.0)
+    ser = serial.Serial('/dev/ttyAMA0',timeout=1.0)
     time.sleep(0.5)
     print(ser)
     return ser
@@ -41,8 +17,10 @@ def init_line():
 def read_gll(ser,nmax=20):
     # val=[0.,'N',0.,'W',0.]
     # for i in range(nmax):
-    #     v=ser.readline().decode("utf-8")
-    #     if str(v[0:6]) == "$GPGLL":
+    #     v=ser.readline()
+    #     print(v)
+    #     v = v.decode("utf-8", 'ignore')
+    #     if str(v[0:6]) == "$GPGLL" or str(v[0:6]) == "$GNGLL":
     #         vv = v.split(",")
     #         val[0] = float(vv[1])
     #         val[1] = vv[2]
@@ -52,24 +30,28 @@ def read_gll(ser,nmax=20):
     #         break
     # return val
 
-    # dataout = pynmea2.NMEAStreamReader() 
-    newdata = ser.readline().decode("utf-8")  
-    if newdata[0:6] == "$GPRMC":
+    newdata = ser.readline().decode("utf-8", 'ignore') 
+    print("Raw data: "+ newdata)
+
+    if newdata[0:6] == "$GPRMC" or newdata[0:6] == "$GNRMC":
         newmsg = pynmea2.parse(newdata)  
         lat = newmsg.latitude 
         lng = newmsg.longitude
-    return lat, lng
+        return lat, lng
    
 
 def close(ser):
     ser.close()
 
-
-
-
 if __name__ == '__main__':
     ser = init_line()
-    try:
-        talker()
-    except rospy.ROSInterruptException:
-        pass
+    while(1):
+        try:
+        
+            val = read_gll(ser)
+            print(val)
+        except Exception:
+            print(Exception)
+            traceback.print_exc()
+            pass
+    close(ser)
